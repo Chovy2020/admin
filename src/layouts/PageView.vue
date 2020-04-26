@@ -125,8 +125,8 @@ export default {
 <style lang="less" scoped>
   .content {
     // margin: 24px 24px 0;
-    margin: 10px 10px 0;
-    height: calc(100% - 100px);
+    margin: 5px 5px 0;
+    height: calc(100% - 71px);
     &>.page-header-index-wide {
       height: 100%;
       &>.ant-card {
