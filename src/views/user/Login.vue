@@ -268,11 +268,11 @@ export default {
       if (res.code === 20000) {
         Vue.ls.set(ACCESS_TOKEN, res.data.token)
         this.$router.push('/system/user', () => {
-          console.log('成功登陆 ')
-          this.$notification.success({
-            message: '欢迎',
-            description: `${timeFix()}，欢迎回来`
-          })
+          // console.log('成功登陆 ')
+          // this.$notification.success({
+          //   message: '欢迎',
+          //   description: `${timeFix()}，欢迎回来`
+          // })
         })
         this.isLoginError = false
       } else {
@@ -282,12 +282,12 @@ export default {
     requestFailed (err) {
       this.isLoginError = true
       // this.getImgCode()
-      this.errorMsg = ((err.response || {}).data || {}).msg || err.msg || '请求出现错误，请稍后再试'
-      this.$notification['error']({
-        message: '错误',
-        description: this.errorMsg,
-        duration: 4
-      })
+      this.errorMsg = ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试'
+      // this.$notification['error']({
+      //   message: '错误',
+      //   description: this.errorMsg,
+      //   duration: 4
+      // })
     }
   }
 }

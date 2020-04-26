@@ -141,18 +141,21 @@ export default {
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'right',
           sorter: true
         },
         {
           title: '创建时间',
           dataIndex: 'createTm',
           scopedSlots: { customRender: 'createTm' },
+          align: 'center',
           sorter: true
         },
         {
           title: '操作',
           width: '200px',
           dataIndex: 'action',
+          align: 'center',
           scopedSlots: { customRender: 'action' }
         }
       ],
