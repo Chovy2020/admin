@@ -17,7 +17,7 @@ router.beforeEach((to, from, next) => {
     /* has token */
     if (to.path === '/user/login') {
       // debugger
-      next({ path: '/dashboard/workplace' })
+      next({ path: '/system/user' })
       NProgress.done()
     } else {
       console.log(store)
