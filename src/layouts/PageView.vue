@@ -1,5 +1,5 @@
 <template>
-  <div :style="!$route.meta.hiddenHeaderContent ? 'margin: -24px -24px 0px;' : null">
+  <div :style="!$route.meta.hiddenHeaderContent ? 'margin: -24px -24px 0px;height:100%;' : null">
     <!-- pageHeader , route meta :true on hide -->
     <page-header v-if="!$route.meta.hiddenHeaderContent" :title="pageTitle" :logo="logo" :avatar="avatar">
       <slot slot="action" name="action"></slot>
@@ -124,7 +124,16 @@ export default {
 
 <style lang="less" scoped>
   .content {
-    margin: 24px 24px 0;
+    // margin: 24px 24px 0;
+    margin: 10px 10px 0;
+    height: calc(100% - 100px);
+    &>.page-header-index-wide {
+      height: 100%;
+      &>.ant-card {
+        height: 100%;
+        overflow: auto;
+      }
+    }
     .link {
       margin-top: 16px;
       &:not(:empty) {

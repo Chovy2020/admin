@@ -5,34 +5,34 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="唯一键">
-              <a-input placeholder="请输入" v-model="queryParam.filter_LK_resKey" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_LK_resKey" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="15">
             <a-form-item label="权限名称">
-              <a-input placeholder="请输入" v-model="queryParam.filter_LK_resName" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_LK_resName" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="15">
             <a-form-item label="状态">
-              <a-select placeholder="请选择" v-model="queryParam.filter_EQ_visible">
+              <a-select size="small" placeholder="请选择" v-model="queryParam.filter_EQ_visible">
                 <a-select-option value>全部</a-select-option>
                 <a-select-option value="0">显示</a-select-option>
                 <a-select-option value="1">隐藏</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="fetch">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" type="primary" @click="fetch">查询</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="4" :sm="15" class="table-operator">
+            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
     </div>
     <a-table
       ref="table"
@@ -72,7 +72,7 @@ export default {
     T,
     PermissionModal
   },
-  data() {
+  data () {
     return {
       description: '',
 
@@ -157,14 +157,14 @@ export default {
     }
   },
   filters: {
-    statusFilter(status) {
+    statusFilter (status) {
       const statusMap = {
         '1': '隐藏',
         '0': '显示'
       }
       return statusMap[status]
     },
-    resTypeFilter(type) {
+    resTypeFilter (type) {
       const menuMap = {
         M: '目录',
         F: '按钮',
@@ -173,21 +173,21 @@ export default {
       return menuMap[type]
     }
   },
-  created() {
+  created () {
     this.fetch()
   },
   methods: {
-    handleAdd(parentId) {
+    handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleOk() {
+    handleOk () {
       // this.$refs.table.refresh()
       this.fetch()
     },
-    delById(id) {
+    delById (id) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
@@ -204,10 +204,10 @@ export default {
         onCancel: () => {}
       })
     },
-    handleChange(res) {
+    handleChange (res) {
       console.log('res', res)
     },
-    fetch() {
+    fetch () {
       this.loading = true
       console.log('fetch', this.queryParam)
       if (!this.queryParam.filter_LK_resKey) {

@@ -29,12 +29,12 @@
             <a-row :gutter="48">
               <a-col :md="5" d:sm="15">
                 <a-form-item label="用户名">
-                  <a-input placeholder="请输入" v-model="queryParam.filter_LK_userName" />
+                  <a-input placeholder="请输入" size="small" v-model="queryParam.filter_LK_userName" />
                 </a-form-item>
               </a-col>
               <a-col :md="5" d:sm="15">
                 <a-form-item label="状态">
-                  <a-select placeholder="请选择" v-model="queryParam.filter_EQ_status">
+                  <a-select placeholder="请选择" size="small" v-model="queryParam.filter_EQ_status">
                     <a-select-option :value="''">全部</a-select-option>
                     <a-select-option :value="'0'">正常</a-select-option>
                     <a-select-option :value="'1'">禁用</a-select-option>
@@ -43,27 +43,18 @@
               </a-col>
               <a-col :md="5" d:sm="15">
                 <span class="table-page-search-submitButtons">
-                  <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+                  <a-button type="primary" size="small" @click="$refs.table.refresh(true)">查询</a-button>
+                  <a-button style="margin-left: 8px" size="small" @click="() => queryParam = {}">重置</a-button>
                 </span>
+              </a-col>
+              <a-col :md="9" d:sm="15" class="table-operator">
+                <a-button v-if="addEnable" size="small" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+                <a-dropdown v-if="removeEnable&& selectedRowKeys.length > 0">
+                  <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+                </a-dropdown>
               </a-col>
             </a-row>
           </a-form>
-        </div>
-        <div class="table-operator">
-          <!-- <a-button type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-          <a-dropdown v-if="selectedRowKeys.length > 0">-->
-          <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-          <a-dropdown v-if="removeEnable&& selectedRowKeys.length > 0">
-            <!-- <a-menu slot="overlay">
-          <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-          <a-menu-item key="2"><a-icon type="lock" />禁用</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
-            </a-button>-->
-            <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
-          </a-dropdown>
         </div>
         <s-table
           size="default"
@@ -118,7 +109,7 @@ export default {
     UserModal,
     UserPwdModal
   },
-  data() {
+  data () {
     return {
       description: '',
       visible: false,
@@ -196,7 +187,7 @@ export default {
       removeEnable: checkPermission('system:user:remove')
     }
   },
-  created() {
+  created () {
     // getDeptList().then(res => {
     //   const data = res.rows
     //   this.buildtree(data, this.deptTree, 0)
@@ -207,25 +198,25 @@ export default {
     // })
   },
   methods: {
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    resetPwd(record) {
+    resetPwd (record) {
       this.$refs.pwdmodal.edit(record)
     },
-    onChange(selectedRowKeys, selectedRows) {
+    onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh()
       console.log('handleSaveOk')
     },
-    delByIds(ids) {
+    delByIds (ids) {
       console.log('ids', ids)
       this.$confirm({
         title: '提示',
@@ -246,7 +237,7 @@ export default {
         onCancel: () => {}
       })
     },
-    onChangeStatus(record) {
+    onChangeStatus (record) {
       record.status = record.status === '0' ? '1' : '0'
       changUserStatus(pick(record, 'id', 'status')).then(res => {
         if (res.code === 20000) {
@@ -260,7 +251,7 @@ export default {
       })
       // 发送状态到服务器
     },
-    buildtree(list, arr, parentId) {
+    buildtree (list, arr, parentId) {
       list.forEach(item => {
         if (item.parentId === parentId) {
           var child = {
@@ -279,16 +270,16 @@ export default {
       })
     },
     // 下面是树相关方法
-    onExpand(expandedKeys) {
+    onExpand (expandedKeys) {
       this.expandedKeys = expandedKeys
       this.autoExpandParent = false
     },
-    emitEmpty() {
+    emitEmpty () {
       this.$refs.searchInput.focus()
       this.searchValue = ''
       this.searchDept()
     },
-    getParentKey(key, tree) {
+    getParentKey (key, tree) {
       let parentKey
       for (let i = 0; i < tree.length; i++) {
         const node = tree[i]
@@ -302,10 +293,10 @@ export default {
       }
       return parentKey
     },
-    handleChange(e) {
+    handleChange (e) {
       this.searchDept()
     },
-    searchDept() {
+    searchDept () {
       const value = this.searchValue
       const expandedKeys = this.dataList
         .map(item => {
@@ -321,7 +312,7 @@ export default {
         autoExpandParent: true
       })
     },
-    handleSelect(selectedKeys, info) {
+    handleSelect (selectedKeys, info) {
       this.queryParam = {
         deptId: selectedKeys[0]
       }

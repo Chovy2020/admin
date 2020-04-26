@@ -5,17 +5,18 @@
         <a-row :gutter="48">
           <a-col :md="4" :sm="12">
             <a-form-item label="参数名称">
-              <a-input placeholder="请输入" v-model="queryParam.filter_LK_configName" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_LK_configName" />
             </a-form-item>
           </a-col>
           <a-col :md="4" :sm="12">
             <a-form-item label="参数键名">
-              <a-input placeholder="请输入" v-model="queryParam.filter_LK_configKey" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_LK_configKey" />
             </a-form-item>
           </a-col>
           <a-col :md="4" :sm="12">
             <a-form-item label="系统内置">
               <a-select
+                size="small"
                 placeholder="请选择"
                 v-model="queryParam.filter_LK_configType"
                 default-value="''"
@@ -26,25 +27,20 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="18">
-            <a-form-item label="创建时间">
-              <a-range-picker v-model="range" />
-            </a-form-item>
-          </a-col>
           <a-col :md="5" :sm="15">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="7" :sm="15" class="table-operator">
+            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+            <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
+              <a-button size="small" type="danger" icon="delete" @click="delByIds(idArr)">删除</a-button>
+            </a-dropdown>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-      <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="delByIds(idArr)">删除</a-button>
-      </a-dropdown>
     </div>
     <s-table
       size="default"
@@ -85,7 +81,7 @@ export default {
     Ellipsis,
     ConfigModal
   },
-  data() {
+  data () {
     return {
       visible: false,
       labelCol: {
@@ -174,7 +170,7 @@ export default {
     }
   },
   filters: {
-    typeFilter(type) {
+    typeFilter (type) {
       const typeMap = {
         Y: '是',
         N: '否'
@@ -182,10 +178,10 @@ export default {
       return typeMap[type]
     }
   },
-  beforeCreate() {},
-  created() {},
+  beforeCreate () {},
+  created () {},
   computed: {
-    idArr() {
+    idArr () {
       const idArr = []
       this.selectedRows.forEach(item => {
         idArr.push(item.id)
@@ -194,19 +190,19 @@ export default {
     }
   },
   methods: {
-    onSelectChange(selectedRowKeys, selectedRows) {
+    onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
       console.log(this.selectedRowKeys)
       console.log(this.selectedRows)
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',

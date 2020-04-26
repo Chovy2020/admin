@@ -5,20 +5,20 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="操作人员">
-              <a-input placeholder="请输入" v-model="queryParam.operName"/>
+              <a-input size="small" placeholder="请输入" v-model="queryParam.operName"/>
             </a-form-item>
           </a-col>
-          <a-col :md="4" :sm="12">
+          <!-- <a-col :md="4" :sm="12">
             <a-form-item label="操作类型">
-              <a-select placeholder="请选择" v-model="queryParam.businessType" default-value="0">
+              <a-select size="small" placeholder="请选择" v-model="queryParam.businessType" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option v-for="(b, index) in businessTypes" :key="index" :value="b.dictValue">{{ b.dictLabel }}</a-select-option>
               </a-select>
             </a-form-item>
-          </a-col>
+          </a-col> -->
           <a-col :md="4" :sm="12">
             <a-form-item label="操作状态">
-              <a-select placeholder="请选择" v-model="queryParam.status" default-value="0">
+              <a-select size="small" placeholder="请选择" v-model="queryParam.status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option :value="0">成功</a-select-option>
                 <a-select-option :value="1">失败</a-select-option>
@@ -27,28 +27,38 @@
           </a-col>
           <a-col :md="6" :sm="18">
             <a-form-item label="操作时间">
-              <a-range-picker v-model="range"/>
+              <a-range-picker size="small" v-model="range"/>
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="15">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="4" :sm="15" class="table-operator">
+            <a-popconfirm v-has="'monitor:operlog:remove'" title="确认清空吗？" @confirm="clean">
+              <a-icon slot="icon" type="question-circle-o" style="color: red" />
+              <a-button size="small" type="danger" ghost icon="close">清空</a-button>
+            </a-popconfirm>
+            <a-button size="small" type="primary" icon="export" @click="exportExcel()">导出</a-button>
+            <a-dropdown v-has="'monitor:operlog:remove'" v-if="selectedRowKeys.length > 0">
+              <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+            </a-dropdown>
           </a-col>
         </a-row>
       </a-form>
     </div>
-    <div class="table-operator">
+    <!-- <div class="table-operator">
       <a-popconfirm v-has="'monitor:operlog:remove'" title="确认清空吗？" @confirm="clean">
         <a-icon slot="icon" type="question-circle-o" style="color: red" />
-        <a-button type="danger" ghost icon="close">清空</a-button>
+        <a-button size="small" type="danger" ghost icon="close">清空</a-button>
       </a-popconfirm>
-      <a-button type="primary" icon="export" @click="exportExcel()">导出</a-button>
+      <a-button size="small" type="primary" icon="export" @click="exportExcel()">导出</a-button>
       <a-dropdown v-has="'monitor:operlog:remove'" v-if="selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+        <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
       </a-dropdown>
-    </div>
+    </div> -->
     <s-table
       size="default"
       ref="table"

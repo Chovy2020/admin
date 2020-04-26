@@ -5,12 +5,12 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="角色名称">
-              <a-input placeholder="请输入角色名称" v-model="queryParam.filter_LK_roleName" />
+              <a-input size="small" placeholder="请输入角色名称" v-model="queryParam.filter_LK_roleName" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="15">
             <a-form-item label="状态">
-              <a-select placeholder="请选择状态" v-model="queryParam.filter_EQ_status" default-value="0">
+              <a-select size="small" placeholder="请选择状态" v-model="queryParam.filter_EQ_status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option :value="0">正常</a-select-option>
                 <a-select-option :value="1">禁用</a-select-option>
@@ -19,9 +19,15 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="6" :sm="15" class="table-operator">
+            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+            <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
+              <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+            </a-dropdown>
           </a-col>
         </a-row>
       </a-form>
@@ -29,17 +35,17 @@
     <div class="table-operator">
       <!-- <a-button type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">-->
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-      <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
-        <!-- <a-menu slot="overlay">
+      <!-- <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+      <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0"> -->
+      <!-- <a-menu slot="overlay">
           <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
           <a-menu-item key="2"><a-icon type="lock" />禁用</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作 <a-icon type="down" />
         </a-button>-->
-        <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
-      </a-dropdown>
+      <!-- <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+      </a-dropdown> -->
     </div>
     <s-table
       size="default"
@@ -98,7 +104,7 @@ export default {
     RoleModal,
     RoleScopeModal
   },
-  data() {
+  data () {
     return {
       description: '',
       visible: false,
@@ -178,29 +184,29 @@ export default {
       removeEnable: checkPermission('system:role:remove')
     }
   },
-  created() {},
+  created () {},
   methods: {
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleAdd(parentId) {
+    handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleScope(record) {
+    handleScope (record) {
       this.$refs.scopemodal.edit(record)
     },
-    onChange(selectedRowKeys, selectedRows) {
+    onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
@@ -220,7 +226,7 @@ export default {
         onCancel: () => {}
       })
     },
-    onChangeStatus(record) {
+    onChangeStatus (record) {
       record.status = record.status === '0' ? '1' : '0'
       changRoleStatus(pick(record, 'id', 'status')).then(res => {
         if (res.code === 20000) {

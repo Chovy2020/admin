@@ -5,17 +5,17 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="登陆地址">
-              <a-input placeholder="请输入" v-model="queryParam.ipaddr"/>
+              <a-input size="small" placeholder="请输入" v-model="queryParam.ipaddr"/>
             </a-form-item>
           </a-col>
-          <a-col :md="5" :sm="15">
+          <!-- <a-col :md="5" :sm="15">
             <a-form-item label="登陆名称">
-              <a-input placeholder="请输入" v-model="queryParam.loginName"/>
+              <a-input size="small" placeholder="请输入" v-model="queryParam.loginName"/>
             </a-form-item>
-          </a-col>
+          </a-col> -->
           <a-col :md="4" :sm="12">
             <a-form-item label="登陆状态">
-              <a-select placeholder="请选择" v-model="queryParam.status" default-value="0">
+              <a-select size="small" placeholder="请选择" v-model="queryParam.status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option v-for="(d, index) in commonStatus" :key="index" :value="d.dictValue">{{ d.dictLabel }}</a-select-option>
               </a-select>
@@ -23,26 +23,26 @@
           </a-col>
           <a-col :md="6" :sm="18">
             <a-form-item label="登陆时间">
-              <a-range-picker v-model="range"/>
+              <a-range-picker size="small" v-model="range"/>
             </a-form-item>
           </a-col>
           <a-col :md="4" :sm="12">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="5" :sm="12" class="table-operator">
+            <a-popconfirm v-has="'monitor:logininfor:remove'" title="确认清空吗？" @confirm="clean">
+              <a-icon slot="icon" type="question-circle-o" style="color: red" />
+              <a-button size="small" type="danger" ghost icon="close">清空</a-button>
+            </a-popconfirm>
+            <a-dropdown v-has="'monitor:logininfor:remove'" v-if="selectedRowKeys.length > 0">
+              <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+            </a-dropdown>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div class="table-operator">
-      <a-popconfirm v-has="'monitor:logininfor:remove'" title="确认清空吗？" @confirm="clean">
-        <a-icon slot="icon" type="question-circle-o" style="color: red" />
-        <a-button type="danger" ghost icon="close">清空</a-button>
-      </a-popconfirm>
-      <a-dropdown v-has="'monitor:logininfor:remove'" v-if="selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
-      </a-dropdown>
     </div>
     <s-table
       size="default"

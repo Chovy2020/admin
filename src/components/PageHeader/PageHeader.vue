@@ -69,7 +69,7 @@ export default {
   border-bottom: 1px solid #e8e8e8;
 
   .breadcrumb {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   .detail {
@@ -109,7 +109,6 @@ export default {
         line-height: 28px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.85);
-        margin-bottom: 16px;
         flex: auto;
       }
       .logo {

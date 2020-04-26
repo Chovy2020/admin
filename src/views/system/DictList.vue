@@ -5,37 +5,37 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="字典名称">
-              <a-input placeholder="请输入" v-model="queryParam.filter_EQ_dictName" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_EQ_dictName" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="15">
             <a-form-item label="字典类型">
-              <a-input placeholder="请输入" v-model="queryParam.filter_EQ_dictType" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_EQ_dictType" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="15">
             <a-form-item label="状态">
-              <a-select placeholder="请选择" v-model="queryParam.filter_EQ_status" default-value="0">
+              <a-select size="small" placeholder="请选择" v-model="queryParam.filter_EQ_status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option :value="0">正常</a-select-option>
                 <a-select-option :value="1">禁用</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="4" :sm="24" class="table-operator">
+            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+            <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
+              <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
+            </a-dropdown>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-      <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
-      </a-dropdown>
     </div>
     <s-table
       size="default"
@@ -88,7 +88,7 @@ export default {
     DictModal,
     DictDataListModal
   },
-  data() {
+  data () {
     return {
       visible: false,
       labelCol: {
@@ -169,32 +169,32 @@ export default {
     }
   },
   filters: {
-    statusFilter(type) {
+    statusFilter (type) {
       return statusMap[type].text
     },
-    statusTypeFilter(type) {
+    statusTypeFilter (type) {
       return statusMap[type].status
     }
   },
-  created() {},
+  created () {},
   methods: {
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
-    handleAdd(parentId) {
+    handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
       console.log('handleSaveOk')
     },
-    dataModal(dictType) {
+    dataModal (dictType) {
       this.$refs.datamodal.show(dictType)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',

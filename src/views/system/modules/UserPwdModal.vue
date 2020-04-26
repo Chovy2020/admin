@@ -9,7 +9,7 @@
     @ok="handleSubmit"
   >
     <a-form :form="form">
-      <a-form-item style="display:none">
+      <a-form-item style="display:none!important">
         <a-input v-decorator="['id']"/>
       </a-form-item>
       <a-form-item

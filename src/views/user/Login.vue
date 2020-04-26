@@ -340,3 +340,8 @@ export default {
   }
 }
 </style>
+<style>
+.ant-form-item-control-wrapper {
+  width: 100%!important;
+}
+</style>
