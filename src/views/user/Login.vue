@@ -120,7 +120,7 @@
 import Vue from 'vue'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
-import { timeFix } from '@/utils/util'
+// import { timeFix } from '@/utils/util'
 // eslint-disable-next-line no-unused-vars
 import md5 from 'md5'
 // eslint-disable-next-line no-unused-vars

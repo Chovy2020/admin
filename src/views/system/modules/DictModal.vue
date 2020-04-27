@@ -45,7 +45,7 @@ export default {
   name: 'DictModal',
   props: {},
   components: {},
-  data() {
+  data () {
     return {
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
@@ -64,21 +64,21 @@ export default {
       form: this.$form.createForm(this)
     }
   },
-  beforeCreate() {},
-  created() {},
+  beforeCreate () {},
+  created () {},
   methods: {
-    add() {
+    add () {
       this.form.resetFields()
       this.edit({ dictId: 0 })
     },
-    edit(record) {
+    edit (record) {
       this.mdl = Object.assign({}, record)
       this.visible = true
       this.$nextTick(() => {
         this.form.setFieldsValue(pick(this.mdl, 'id', 'dictName', 'dictType', 'status', 'remark'))
       })
     },
-    handleSubmit(e) {
+    handleSubmit (e) {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
