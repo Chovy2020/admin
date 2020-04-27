@@ -120,12 +120,14 @@ export default {
       columns: [
         {
           title: '日志编号',
-          dataIndex: 'operId',
+          dataIndex: 'id',
+          align: 'center',
           sorter: true
         },
         {
           title: '系统模块',
           dataIndex: 'title',
+          align: 'center',
           sorter: true
         },
         // {
@@ -141,27 +143,32 @@ export default {
         {
           title: '主机',
           dataIndex: 'operIp',
+          align: 'right',
           sorter: true
         },
         {
           title: '操作地点',
           dataIndex: 'operLocation',
+          align: 'center',
           sorter: true
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' },
           sorter: true
         },
         {
           title: '操作时间',
           dataIndex: 'operTime',
+          align: 'center',
           sorter: true
         },
         {
           title: '操作',
           width: '150px',
+          align: 'center',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }

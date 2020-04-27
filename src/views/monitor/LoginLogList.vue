@@ -96,48 +96,56 @@ export default {
       columns: [
         {
           title: '访问编号',
-          dataIndex: 'infoId',
+          dataIndex: 'id',
+          align: 'center',
           sorter: true
         },
         {
           title: '登录名称',
-          dataIndex: 'loginName',
+          dataIndex: 'userName',
           sorter: true
         },
         {
           title: '登录地址',
-          dataIndex: 'ipaddr',
+          dataIndex: 'ipAddr',
+          align: 'center',
           sorter: true
         },
         {
           title: '登录地点',
           dataIndex: 'loginLocation',
+          align: 'center',
           sorter: true
         },
         {
           title: '浏览器',
           dataIndex: 'browser',
+          align: 'center',
           sorter: true
         },
         {
           title: '操作系统',
-          dataIndex: 'os',
+          dataIndex: 'osType',
+          align: 'center',
           sorter: true
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' },
           sorter: true
         },
         {
           title: '操作信息',
-          dataIndex: 'msg',
+          dataIndex: 'message',
+          align: 'center',
           sorter: true
         },
         {
           title: '操作时间',
           dataIndex: 'loginTime',
+          align: 'center',
           sorter: true
         }
       ],

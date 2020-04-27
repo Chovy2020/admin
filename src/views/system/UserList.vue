@@ -143,7 +143,7 @@ export default {
         {
           title: '状态',
           dataIndex: 'status',
-          align: 'right',
+          align: 'center',
           sorter: true
         },
         {

@@ -140,23 +140,27 @@ export default {
         {
           title: '显示顺序',
           dataIndex: 'sortNo',
+          align: 'center',
           sorter: true
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' },
           sorter: true
         },
         {
           title: '创建时间',
           dataIndex: 'createTm',
+          align: 'center',
           scopedSlots: { customRender: 'createTm' },
           sorter: true
         },
         {
           title: '操作',
           width: '200px',
+          align: 'center',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }

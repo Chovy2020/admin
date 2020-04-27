@@ -100,6 +100,7 @@ export default {
         {
           title: '参数主键',
           dataIndex: 'id',
+          align: 'center',
           sorter: true
         },
         {
@@ -121,6 +122,7 @@ export default {
         {
           title: '系统内置',
           dataIndex: 'configType',
+          align: 'center',
           scopedSlots: { customRender: 'configType' },
           sorter: true
         },
@@ -139,6 +141,7 @@ export default {
         {
           title: '操作',
           width: '150px',
+          align: 'center',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }

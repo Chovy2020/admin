@@ -114,24 +114,26 @@ export default {
         {
           title: '排序',
           dataIndex: 'sortNo',
+          align: 'center',
           sorter: true
         },
         {
           title: '按钮类型',
           dataIndex: 'resType',
+          align: 'center',
           scopedSlots: { customRender: 'resType' },
           sorter: true
         },
-        {
-          title: '链接',
-          dataIndex: 'path',
-          sorter: true
-        },
-        {
-          title: '重定向',
-          dataIndex: 'redirect',
-          sorter: true
-        },
+        // {
+        //   title: '链接',
+        //   dataIndex: 'path',
+        //   sorter: true
+        // },
+        // {
+        //   title: '重定向',
+        //   dataIndex: 'redirect',
+        //   sorter: true
+        // },
         {
           title: '权限标识',
           dataIndex: 'perms',
@@ -140,12 +142,14 @@ export default {
         {
           title: '状态',
           dataIndex: 'visible',
+          align: 'center',
           scopedSlots: { customRender: 'visible' },
           sorter: true
         },
         {
           title: '操作',
           width: '150px',
+          align: 'center',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
