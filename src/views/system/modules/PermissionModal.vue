@@ -1,6 +1,6 @@
 <template>
   <a-modal title="操作" style="top: 20px;" :width="800" v-model="visible" @ok="handleSubmit">
-    <a-form :form="form">
+    <a-form :form="form" style="max-height: 500px; overflow-y: auto;">
       <a-form-item style="display:none!important">
         <a-input v-decorator="['id']" />
       </a-form-item>

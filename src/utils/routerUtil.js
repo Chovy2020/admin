@@ -9,7 +9,7 @@ const constantRouterComponents = {
   BlankLayout: BlankLayout, // 空白的布局
   RouteView: RouteView, // 空布局，专门为了二级菜单内容区自定义
   PageView: PageView, // 基础布局，包含了面包屑，和中间内容区 (slot)
-  UserLayout: UserLayout, // 登陆注册页面的通用布局
+  UserLayout: UserLayout, // 登录注册页面的通用布局
 
   // 你需要动态引入的页面组件
   analysis: () => import('@/views/dashboard/Analysis'),

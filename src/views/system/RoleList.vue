@@ -61,6 +61,8 @@
       :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
+      defaultSort="sortNo"
+      defaultOrder="asc"
     >
       <!-- <div
         slot="expandedRowRender"
@@ -145,12 +147,13 @@ export default {
         {
           title: '显示顺序',
           dataIndex: 'sortNo',
-          sorter: true,
-          align: 'center'
+          align: 'center',
+          sorter: true
         },
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' },
           sorter: true,
           align: 'center'
@@ -158,6 +161,7 @@ export default {
         {
           title: '创建时间',
           dataIndex: 'createTm',
+          align: 'center',
           scopedSlots: { customRender: 'createTm' },
           sorter: true,
           align: 'center'
@@ -165,6 +169,7 @@ export default {
         {
           title: '操作',
           width: '200px',
+          align: 'center',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' },
           align: 'center'
@@ -172,6 +177,7 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
+        console.log('parameter', parameter)
         const queryParam = { ...this.queryParam }
         if (this.queryParam.filter_EQ_status === '') {
           delete queryParam.filter_EQ_status

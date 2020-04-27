@@ -114,6 +114,12 @@ export default {
       // 表头
       columns: [
         {
+          title: '字典主键',
+          dataIndex: 'id',
+          align: 'center',
+          sorter: true
+        },
+        {
           title: '字典名称',
           dataIndex: 'dictName',
           sorter: true
@@ -126,6 +132,7 @@ export default {
         {
           title: '状态',
           dataIndex: 'status',
+          align: 'center',
           scopedSlots: { customRender: 'status' },
           sorter: true,
           align: 'center'
@@ -144,6 +151,7 @@ export default {
         {
           title: '操作',
           width: '200px',
+          align: 'center',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' },
           align: 'center'

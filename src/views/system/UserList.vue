@@ -149,8 +149,8 @@ export default {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' },
-          sorter: true,
-          align: 'center'
+          align: 'center',
+          sorter: true
         },
         {
           title: '创建时间',

@@ -39,7 +39,7 @@ export function getLoginLogList (parameter) {
   return axios({
     url: api.loginLog + `/page/${pageNum}/${pageSize}`,
     method: 'post',
-    data: queryObj,
+    params: queryObj,
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }

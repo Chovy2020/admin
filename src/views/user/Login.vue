@@ -271,7 +271,7 @@ export default {
       if (res.code === 20000) {
         Vue.ls.set(ACCESS_TOKEN, res.data.token)
         this.$router.push('/system/user', () => {
-          // console.log('成功登陆 ')
+          // console.log('成功登录 ')
           // this.$notification.success({
           //   message: '欢迎',
           //   description: `${timeFix()}，欢迎回来`
