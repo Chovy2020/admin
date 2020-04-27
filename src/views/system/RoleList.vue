@@ -61,6 +61,8 @@
       :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
+      defaultSort="sortNo"
+      defaultOrder="asc"
     >
       <!-- <div
         slot="expandedRowRender"
@@ -175,6 +177,7 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
+        console.log('parameter', parameter)
         const queryParam = { ...this.queryParam }
         if (this.queryParam.filter_EQ_status === '') {
           delete queryParam.filter_EQ_status
