@@ -123,7 +123,8 @@ export default {
           title: '系统内置',
           dataIndex: 'configType',
           scopedSlots: { customRender: 'configType' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '创建时间',

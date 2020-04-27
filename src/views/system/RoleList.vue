@@ -24,8 +24,13 @@
             </span>
           </a-col>
           <a-col :md="6" :sm="15" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()"
-              >新建</a-button
+            <a-button
+              size="small"
+              v-if="addEnable"
+              type="primary"
+              icon="plus"
+              @click="$refs.modal.add()"
+            >新建</a-button
             >
             <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
@@ -106,7 +111,7 @@ export default {
     RoleModal,
     RoleScopeModal
   },
-  data() {
+  data () {
     return {
       description: '',
       visible: false,
@@ -140,25 +145,29 @@ export default {
         {
           title: '显示顺序',
           dataIndex: 'sortNo',
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '创建时间',
           dataIndex: 'createTm',
           scopedSlots: { customRender: 'createTm' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '操作',
           width: '200px',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       // 加载数据方法 必须为 Promise 对象
@@ -193,29 +202,29 @@ export default {
       removeEnable: checkPermission('system:role:remove')
     }
   },
-  created() {},
+  created () {},
   methods: {
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleAdd(parentId) {
+    handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleScope(record) {
+    handleScope (record) {
       this.$refs.scopemodal.edit(record)
     },
-    onChange(selectedRowKeys, selectedRows) {
+    onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
@@ -242,7 +251,7 @@ export default {
         onCancel: () => {}
       })
     },
-    onChangeStatus(record) {
+    onChangeStatus (record) {
       record.status = record.status === '0' ? '1' : '0'
       changRoleStatus(pick(record, 'id', 'status')).then(res => {
         if (res.code === 51000) {

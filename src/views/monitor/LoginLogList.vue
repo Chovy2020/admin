@@ -74,7 +74,7 @@ export default {
   components: {
     STable
   },
-  data() {
+  data () {
     return {
       visible: false,
       labelCol: {
@@ -128,7 +128,8 @@ export default {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '操作信息',
@@ -166,10 +167,10 @@ export default {
     }
   },
   filters: {
-    operTypeFilter(type) {
+    operTypeFilter (type) {
       return commonStatusMap[type].text
     },
-    statusFilter(status) {
+    statusFilter (status) {
       const statusMap = {
         '1': '失败',
         '0': '成功'
@@ -177,8 +178,8 @@ export default {
       return statusMap[status]
     }
   },
-  beforeCreate() {},
-  async created() {
+  beforeCreate () {},
+  async created () {
     const commonStatus = await getDictArray('sys_common_status')
     this.commonStatus = commonStatus.data
     this.commonStatus.map(d => {
@@ -186,14 +187,14 @@ export default {
     })
   },
   methods: {
-    onSelectChange(selectedRowKeys, selectedRows) {
+    onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$message.success(`你删除了` + ids)
       // delLoginLog({ ids: ids.join(',') }).then(res => {
       //   if (res.code === 0) {
@@ -205,7 +206,7 @@ export default {
       //   this.selectedRowKeys = []
       // })
     },
-    clean() {
+    clean () {
       this.$message.success(`你点击了清空`)
       // cleanLoginLog().then(res => {
       //   this.handleOk()
