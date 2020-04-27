@@ -8,7 +8,7 @@
     @ok="handleOk"
     @cancel="handleCancel"
   >
-    <a-form :form="form">
+    <a-form :form="form" style="max-height: 500px; overflow-y: auto;">
       <a-form-item style="display:none!important">
         <a-input v-decorator="['id']" />
       </a-form-item>
