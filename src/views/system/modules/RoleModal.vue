@@ -25,8 +25,7 @@
         />
       </a-form-item>
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限字符">
-        <a-input-number
-          style="width: 100%"
+        <a-input
           v-decorator="['roleKey', { rules: [{ required: true, message: '请输入权限字符' }] }]"
           placeholder="权限字符"
         />
