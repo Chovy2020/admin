@@ -18,19 +18,19 @@
           </a-col> -->
           <a-col :md="4" :sm="12">
             <a-form-item label="操作状态">
-              <a-select size="small" placeholder="请选择" v-model="queryParam.status" default-value="0">
+              <a-select size="small" placeholder="请选择" v-model="queryParam.filter_EQ_status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option :value="0">成功</a-select-option>
                 <a-select-option :value="1">失败</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="18">
+          <a-col :md="7" :sm="18">
             <a-form-item label="操作时间">
               <a-range-picker size="small" v-model="range"/>
             </a-form-item>
           </a-col>
-          <a-col :md="5" :sm="15">
+          <a-col :md="4" :sm="15">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
               <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
@@ -119,20 +119,10 @@ export default {
       // 表头
       columns: [
         {
-          title: '日志编号',
-          dataIndex: 'operId',
-          sorter: true
-        },
-        {
           title: '系统模块',
           dataIndex: 'title',
           sorter: true
         },
-        // {
-        //   title: '操作类型',
-        //   dataIndex: 'businessType',
-        //   scopedSlots: { customRender: 'businessType' }
-        // },
         {
           title: '操作人员',
           dataIndex: 'operName',
@@ -152,29 +142,36 @@ export default {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '操作时间',
           dataIndex: 'operTime',
-          sorter: true
+          sorter: true,
+          align: 'center'
         }, {
           title: '操作',
           width: '150px',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       range: null,
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('parameter', parameter)
+        const queryParam = { ...this.queryParam }
+        if (this.queryParam.filter_EQ_status === '') {
+          delete queryParam.filter_EQ_status
+        }
         return getOperLogList(Object.assign(parameter, this.queryParam)).then(res => {
           const data = res.data
-          data.pageNum = parameter ? parameter.pageNum : 1
+          data.pageNum = parameter.pageNum
           data.total = data.totalElements
           data.data = data.content.map(item => {
-            return { ...item, status: `${item.status}` }
+            return { ...item, filter_EQ_status: `${item.status}` }
           })
           return data
         })

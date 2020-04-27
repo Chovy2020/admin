@@ -50,7 +50,7 @@
       :columns="columns"
       :data="loadData"
       :rangPicker="range"
-      defaultSort="createTime"
+      defaultSort="createTm"
     >
       <span slot="configType" slot-scope="text">{{ text | typeFilter }}</span>
       <span slot="configValue" slot-scope="text">
@@ -102,11 +102,6 @@ export default {
       // 表头
       columns: [
         {
-          title: '参数主键',
-          dataIndex: 'configId',
-          sorter: true
-        },
-        {
           title: '参数名称',
           dataIndex: 'configName',
           sorter: true
@@ -129,21 +124,24 @@ export default {
           sorter: true
         },
         {
+          title: '创建时间',
+          dataIndex: 'createTm',
+          sorter: true,
+          align: 'center'
+        },
+        {
           title: '备注',
           dataIndex: 'remark',
           scopedSlots: { customRender: 'remark' },
-          sorter: true
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          sorter: true
+          sorter: true,
+          width: '150px'
         },
         {
           title: '操作',
           width: '150px',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       range: null,

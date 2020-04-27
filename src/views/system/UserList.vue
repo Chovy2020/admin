@@ -141,19 +141,23 @@ export default {
         {
           title: '状态',
           dataIndex: 'status',
-          sorter: true
+          scopedSlots: { customRender: 'status' },
+          sorter: true,
+          align: 'center'
         },
         {
           title: '创建时间',
           dataIndex: 'createTm',
           scopedSlots: { customRender: 'createTm' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '操作',
           width: '200px',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       // 加载数据方法 必须为 Promise 对象

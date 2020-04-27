@@ -109,11 +109,6 @@ export default {
       // 表头
       columns: [
         {
-          title: '字典主键',
-          dataIndex: 'id',
-          sorter: true
-        },
-        {
           title: '字典名称',
           dataIndex: 'dictName',
           sorter: true
@@ -127,7 +122,14 @@ export default {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' },
-          sorter: true
+          sorter: true,
+          align: 'center'
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'createTm',
+          sorter: true,
+          align: 'center'
         },
         {
           title: '备注',
@@ -135,15 +137,11 @@ export default {
           sorter: true
         },
         {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          sorter: true
-        },
-        {
           title: '操作',
           width: '200px',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       // 加载数据方法 必须为 Promise 对象

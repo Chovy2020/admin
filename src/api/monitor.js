@@ -12,7 +12,7 @@ export function getOperLogList (parameter) {
   const { pageNum, pageSize, ...queryObj } = parameter
   return axios({
     url: api.operLog + `/page/${pageNum}/${pageSize}`,
-    method: 'post',
+    method: 'get',
     data: queryObj,
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

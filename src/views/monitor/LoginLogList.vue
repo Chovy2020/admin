@@ -21,12 +21,12 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="18">
+          <a-col :md="7" :sm="18">
             <a-form-item label="登陆时间">
               <a-range-picker size="small" v-model="range"/>
             </a-form-item>
           </a-col>
-          <a-col :md="4" :sm="12">
+          <a-col :md="3" :sm="12">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
               <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
