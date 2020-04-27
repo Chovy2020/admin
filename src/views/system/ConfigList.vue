@@ -130,7 +130,8 @@ export default {
           dataIndex: 'configType',
           align: 'center',
           scopedSlots: { customRender: 'configType' },
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '创建时间',
