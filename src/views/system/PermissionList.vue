@@ -29,8 +29,13 @@
             </span>
           </a-col>
           <a-col :md="4" :sm="15" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()"
-              >新建</a-button
+            <a-button
+              size="small"
+              v-if="addEnable"
+              type="primary"
+              icon="plus"
+              @click="$refs.modal.add()"
+            >新建</a-button
             >
           </a-col>
         </a-row>
@@ -74,7 +79,7 @@ export default {
     T,
     PermissionModal
   },
-  data() {
+  data () {
     return {
       description: '',
 
@@ -159,14 +164,14 @@ export default {
     }
   },
   filters: {
-    statusFilter(status) {
+    statusFilter (status) {
       const statusMap = {
         '1': '隐藏',
         '0': '显示'
       }
       return statusMap[status]
     },
-    resTypeFilter(type) {
+    resTypeFilter (type) {
       const menuMap = {
         M: '目录',
         F: '按钮',
@@ -175,21 +180,21 @@ export default {
       return menuMap[type]
     }
   },
-  created() {
+  created () {
     this.fetch()
   },
   methods: {
-    handleAdd(parentId) {
+    handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleOk() {
+    handleOk () {
       // this.$refs.table.refresh()
       this.fetch()
     },
-    delById(id) {
+    delById (id) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
@@ -213,10 +218,10 @@ export default {
         onCancel: () => {}
       })
     },
-    handleChange(res) {
+    handleChange (res) {
       console.log('res', res)
     },
-    fetch() {
+    fetch () {
       this.loading = true
       console.log('fetch', this.queryParam)
       if (!this.queryParam.filter_LK_resKey) {
