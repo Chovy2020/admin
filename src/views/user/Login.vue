@@ -20,7 +20,7 @@
               placeholder="账户"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change', initialValue: 'admin'}
               ]"
               style="width: 300px"
             >
@@ -35,7 +35,7 @@
               placeholder="密码"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur', initialValue: '123456'}
               ]"
               style="width: 300px"
             >
@@ -271,11 +271,11 @@ export default {
       if (res.code === 20000) {
         Vue.ls.set(ACCESS_TOKEN, res.data.token)
         this.$router.push('/system/user', () => {
-          console.log('成功登陆 ')
-          this.$notification.success({
-            message: '欢迎',
-            description: `${timeFix()}，欢迎回来`
-          })
+          // console.log('成功登陆 ')
+          // this.$notification.success({
+          //   message: '欢迎',
+          //   description: `${timeFix()}，欢迎回来`
+          // })
         })
         this.isLoginError = false
       } else {
@@ -285,12 +285,12 @@ export default {
     requestFailed (err) {
       this.isLoginError = true
       // this.getImgCode()
-      this.errorMsg = ((err.response || {}).data || {}).msg || err.msg || '请求出现错误，请稍后再试'
-      this.$notification['error']({
-        message: '错误',
-        description: this.errorMsg,
-        duration: 4
-      })
+      this.errorMsg = ((err.response || {}).data || {}).message || err.message || '请求出现错误，请稍后再试'
+      // this.$notification['error']({
+      //   message: '错误',
+      //   description: this.errorMsg,
+      //   duration: 4
+      // })
     }
   }
 }

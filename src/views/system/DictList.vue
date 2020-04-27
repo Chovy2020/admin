@@ -25,12 +25,19 @@
           <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => (queryParam = {})">重置</a-button>
             </span>
           </a-col>
           <a-col :md="4" :sm="24" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-            <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
+            <a-button
+              size="small"
+              v-if="addEnable"
+              type="primary"
+              icon="plus"
+              @click="$refs.modal.add()"
+            >新建</a-button
+            >
+            <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
             </a-dropdown>
           </a-col>
@@ -41,7 +48,7 @@
       size="default"
       ref="table"
       rowKey="id"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
     >
@@ -51,9 +58,7 @@
       <span slot="action" slot-scope="text, record">
         <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />
-        <a v-if="editEnabel" @click="dataModal(record.dictType)">
-          <a-icon type="bars" />列表
-        </a>
+        <a v-if="editEnabel" @click="dataModal(record.dictType)"> <a-icon type="bars" />列表 </a>
         <a-divider type="vertical" />
         <a v-if="removeEnable" @click="delByIds([record.id])">删除</a>
       </span>
@@ -151,6 +156,13 @@ export default {
           delete queryParam.filter_EQ_status
         }
         return getDictTypeList(Object.assign(parameter, queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.data = data.data.map(item => {
@@ -198,6 +210,13 @@ export default {
         content: '真的要删除吗 ?',
         onOk: () => {
           delDictType({ ids: ids.join(',') }).then(res => {
+            if (res.code === 51000) {
+              this.$message.error('登录已失效，请重新登录')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+              return
+            }
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.handleOk()

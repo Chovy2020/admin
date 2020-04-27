@@ -9,16 +9,11 @@
     @cancel="handleCancel"
   >
     <a-form :form="form">
-
       <a-form-item style="display:none!important">
-        <a-input v-decorator="['id']"/>
+        <a-input v-decorator="['id']" />
       </a-form-item>
 
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="角色名称"
-      >
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="角色名称">
         <a-input
           v-decorator="[
             'roleName',
@@ -26,47 +21,33 @@
               rules: [{ required: true, message: '请输入角色名称' }]
             }
           ]"
-          placeholder="请输入角色名称"/>
+          placeholder="请输入角色名称"
+        />
       </a-form-item>
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="权限字符"
-      >
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限字符">
         <a-input-number
           style="width: 100%"
-          v-decorator="['roleKey',{rules: [{ required: true, message: '请输入权限字符' }]}]"
-          placeholder="权限字符"/>
+          v-decorator="['roleKey', { rules: [{ required: true, message: '请输入权限字符' }] }]"
+          placeholder="权限字符"
+        />
       </a-form-item>
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="显示顺序"
-      >
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="显示顺序">
         <a-input-number
           style="width: 100%"
-          v-decorator="['sortNo',{rules: [{ required: true, message: '请输入显示顺序' }]}]"
-          placeholder="显示顺序"/>
+          v-decorator="['sortNo', { rules: [{ required: true, message: '请输入显示顺序' }] }]"
+          placeholder="显示顺序"
+        />
       </a-form-item>
 
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="状态"
-      >
-        <a-select v-decorator="['status', {initialValue:'0',rules: [{ required: true, message: '请选择状态' }]}]">
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="状态">
+        <a-select v-decorator="['status', { initialValue: '0', rules: [{ required: true, message: '请选择状态' }] }]">
           <a-select-option :value="'0'">正常</a-select-option>
           <a-select-option :value="'1'">禁用</a-select-option>
         </a-select>
       </a-form-item>
 
       <a-divider />
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="拥有权限"
-      >
-
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="拥有权限">
         <!-- v-decorator="['parentId',{initialValue:'0'}]" -->
         <!-- <a-tree
           checkable
@@ -80,16 +61,9 @@
           :checkedKeys="checkedKeys"
           :treeData="permissions"
         > -->
-        <a-tree
-          checkable
-          v-model="checkedKeys"
-          @check="onCheck"
-          :treeData="permissions"
-        >
-        </a-tree>
+        <a-tree checkable v-model="checkedKeys" @check="onCheck" :treeData="permissions"> </a-tree>
       </a-form-item>
     </a-form>
-
   </a-modal>
 </template>
 
@@ -99,7 +73,7 @@ import pick from 'lodash.pick'
 
 export default {
   name: 'RoleModal',
-  data () {
+  data() {
     return {
       labelCol: {
         xs: { span: 24 },
@@ -121,17 +95,17 @@ export default {
       halfCheckedKeys: []
     }
   },
-  created () {
+  created() {
     this.loadPermissions()
   },
   methods: {
-    add () {
+    add() {
       this.form.resetFields()
       this.checkedKeys = []
       this.pidSet = []
-      this.edit({ })
+      this.edit({})
     },
-    edit (record) {
+    edit(record) {
       // if (record.id) {
       //   getRolePermIds(record.id).then(res => {
       //     const pidSet = new Set(res.data.map(m => m.parentId).filter(id => id !== '000000'))
@@ -158,29 +132,29 @@ export default {
         // this.form.setFieldsValue(...record)
       })
     },
-    close () {
+    close() {
       this.$emit('close')
       this.visible = false
     },
-    onExpand (expandedKeys) {
+    onExpand(expandedKeys) {
       console.log('onExpand', expandedKeys)
       this.expandedKeys = expandedKeys
       this.autoExpandParent = false
     },
-    onCheck (checkedKeys, info) {
+    onCheck(checkedKeys, info) {
       if (!this.treeCheck) this.treeCheck = true
       this.checkedKeys = checkedKeys
       this.halfCheckedKeys = info.halfCheckedKeys
     },
-    onSelect (selectedKeys, info) {
+    onSelect(selectedKeys, info) {
       this.selectedKeys = selectedKeys
     },
-    loadPermissions () {
+    loadPermissions() {
       getPermissions().then(res => {
         this.buildtree(res.data, this.permissions, '000000')
       })
     },
-    buildtree (list, permissions, parentId) {
+    buildtree(list, permissions, parentId) {
       list.forEach(item => {
         if (item.parentId === parentId) {
           var child = {
@@ -193,10 +167,12 @@ export default {
         }
       })
     },
-    handleOk (e) {
+    handleOk(e) {
       const _this = this
       // 如果没有check过，半选节点是拿不到的，只能通过预先设置的pidSet获取
-      const checkedAll = this.treeCheck ? _this.checkedKeys.concat(_this.halfCheckedKeys) : _this.checkedKeys.concat(Array.from(_this.pidSet))
+      const checkedAll = this.treeCheck
+        ? _this.checkedKeys.concat(_this.halfCheckedKeys)
+        : _this.checkedKeys.concat(Array.from(_this.pidSet))
       if (!checkedAll.length > 0) {
         _this.$message.warning('请至少选择一个权限')
         return
@@ -210,31 +186,37 @@ export default {
           if (!values.id) {
             delete values.id
           }
-          console.log(values, 'value')
-          saveRole(Object.assign(values)).then(res => {
-            if (res.code === 20000) {
-              _this.$message.success(res.message)
-              _this.$emit('ok')
-              _this.visible = false
-            } else {
-              _this.$message.error(res.message)
-            }
-          }).catch(() => {
-            _this.$message.error('系统错误，请稍后再试')
-          }).finally(() => {
-            _this.confirmLoading = false
-          })
+          saveRole(Object.assign(values))
+            .then(res => {
+              if (res.code === 51000) {
+                this.$message.error('登录已失效，请重新登录')
+                setTimeout(() => {
+                  location.reload()
+                }, 1000)
+                return
+              }
+              if (res.code === 20000) {
+                _this.$message.success(res.message)
+                _this.$emit('ok')
+                _this.visible = false
+              } else {
+                _this.$message.error(res.message)
+              }
+            })
+            .catch(() => {
+              _this.$message.error('系统错误，请稍后再试')
+            })
+            .finally(() => {
+              _this.confirmLoading = false
+            })
         }
       })
     },
-    handleCancel () {
+    handleCancel() {
       this.visible = false
     }
-
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

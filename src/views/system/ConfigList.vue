@@ -15,12 +15,7 @@
           </a-col>
           <a-col :md="4" :sm="12">
             <a-form-item label="系统内置">
-              <a-select
-                size="small"
-                placeholder="请选择"
-                v-model="queryParam.filter_LK_configType"
-                default-value="''"
-              >
+              <a-select size="small" placeholder="请选择" v-model="queryParam.filter_LK_configType" default-value="''">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option :value="'Y'">是</a-select-option>
                 <a-select-option :value="'N'">否</a-select-option>
@@ -30,11 +25,18 @@
           <a-col :md="5" :sm="15">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => (queryParam = {})">重置</a-button>
             </span>
           </a-col>
           <a-col :md="7" :sm="15" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+            <a-button
+              size="small"
+              v-if="addEnable"
+              type="primary"
+              icon="plus"
+              @click="$refs.modal.add()"
+            >新建</a-button
+            >
             <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(idArr)">删除</a-button>
             </a-dropdown>
@@ -46,7 +48,7 @@
       size="default"
       ref="table"
       rowKey="configId"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
       :rangPicker="range"
@@ -152,6 +154,13 @@ export default {
           delete queryParam.filter_LK_configType
         }
         return getConfigList(Object.assign(parameter, queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.data = data.data.map(item => {
@@ -191,8 +200,6 @@ export default {
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
-      console.log(this.selectedRowKeys)
-      console.log(this.selectedRows)
     },
     handleOk () {
       this.$refs.table.refresh(true)
@@ -206,6 +213,13 @@ export default {
         content: '真的要删除吗 ?',
         onOk: () => {
           delConfig({ ids: ids.join(',') }).then(res => {
+            if (res.code === 51000) {
+              this.$message.error('登录已失效，请重新登录')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+              return
+            }
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.handleOk()

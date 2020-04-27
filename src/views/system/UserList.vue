@@ -44,12 +44,19 @@
               <a-col :md="5" d:sm="15">
                 <span class="table-page-search-submitButtons">
                   <a-button type="primary" size="small" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button style="margin-left: 8px" size="small" @click="() => queryParam = {}">重置</a-button>
+                  <a-button style="margin-left: 8px" size="small" @click="() => (queryParam = {})">重置</a-button>
                 </span>
               </a-col>
               <a-col :md="9" d:sm="15" class="table-operator">
-                <a-button v-if="addEnable" size="small" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-                <a-dropdown v-if="removeEnable&& selectedRowKeys.length > 0">
+                <a-button
+                  v-if="addEnable"
+                  size="small"
+                  type="primary"
+                  icon="plus"
+                  @click="$refs.modal.add()"
+                >新建</a-button
+                >
+                <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
                   <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
                 </a-dropdown>
               </a-col>
@@ -60,14 +67,14 @@
           size="default"
           ref="table"
           rowKey="id"
-          :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+          :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
           :columns="columns"
           :data="loadData"
         >
-          <span slot="status" slot-scope="text,record">
-            <a-switch :checked="record.status=='0'" @change="onChangeStatus(record)" />
+          <span slot="status" slot-scope="text, record">
+            <a-switch :checked="record.status == '0'" @change="onChangeStatus(record)" />
           </span>
-          <span slot="createTm" slot-scope="text,record">{{ record.createTm | dayjs }}</span>
+          <span slot="createTm" slot-scope="text, record">{{ record.createTm | dayjs }}</span>
           <span slot="action" slot-scope="text, record">
             <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
@@ -170,6 +177,13 @@ export default {
           delete queryParam.filter_LK_userName
         }
         return getUserList(Object.assign(parameter, queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.data = data.data.map(item => {
@@ -227,6 +241,13 @@ export default {
         content: '真的要删除吗 ?',
         onOk: () => {
           delUser({ ids: ids.join(',') }).then(res => {
+            if (res.code === 51000) {
+              this.$message.error('登录已失效，请重新登录')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+              return
+            }
             if (res.code === 20000) {
               this.$message.success(`删除成功`)
               this.handleOk()
@@ -244,6 +265,13 @@ export default {
     onChangeStatus (record) {
       record.status = record.status === '0' ? '1' : '0'
       changUserStatus(pick(record, 'id', 'status')).then(res => {
+        if (res.code === 51000) {
+          this.$message.error('登录已失效，请重新登录')
+          setTimeout(() => {
+            location.reload()
+          }, 1000)
+          return
+        }
         if (res.code === 20000) {
           this.$message.success(res.message)
         } else {

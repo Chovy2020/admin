@@ -5,7 +5,7 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="操作人员">
-              <a-input size="small" placeholder="请输入" v-model="queryParam.operName"/>
+              <a-input size="small" placeholder="请输入" v-model="queryParam.operName" />
             </a-form-item>
           </a-col>
           <!-- <a-col :md="4" :sm="12">
@@ -27,13 +27,13 @@
           </a-col>
           <a-col :md="7" :sm="18">
             <a-form-item label="操作时间">
-              <a-range-picker size="small" v-model="range"/>
+              <a-range-picker size="small" v-model="range" />
             </a-form-item>
           </a-col>
           <a-col :md="4" :sm="15">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => (queryParam = {})">重置</a-button>
             </span>
           </a-col>
           <a-col :md="4" :sm="15" class="table-operator">
@@ -63,7 +63,7 @@
       size="default"
       ref="table"
       rowKey="operId"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
       :rangPicker="range"
@@ -80,7 +80,7 @@
         <a @click="handleDetail(record)">详细</a>
       </span>
     </s-table>
-    <operLog-modal ref="modal" :operTypeMap="operTypeMap" v-if="operTypeMap"/>
+    <operLog-modal ref="modal" :operTypeMap="operTypeMap" v-if="operTypeMap" />
   </a-card>
 </template>
 
@@ -150,7 +150,8 @@ export default {
           dataIndex: 'operTime',
           sorter: true,
           align: 'center'
-        }, {
+        },
+        {
           title: '操作',
           width: '150px',
           dataIndex: 'action',
@@ -167,6 +168,13 @@ export default {
           delete queryParam.filter_EQ_status
         }
         return getOperLogList(Object.assign(parameter, this.queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.total = data.totalElements
@@ -180,7 +188,6 @@ export default {
       businessTypes: [],
       selectedRowKeys: [],
       selectedRows: []
-
     }
   },
   filters: {
@@ -195,9 +202,7 @@ export default {
       return statusMap[status]
     }
   },
-  beforeCreate () {
-
-  },
+  beforeCreate () {},
   async created () {
     // 字典两种用法，各有优缺点
     // operTypeMap = await getDictMap('sys_oper_type')

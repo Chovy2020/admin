@@ -10,23 +10,22 @@
   >
     <a-form :form="form">
       <a-form-item style="display:none!important">
-        <a-input v-decorator="['id']"/>
+        <a-input v-decorator="['id']" />
       </a-form-item>
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="用户名"
-      >
-        <a-input placeholder="用户名" disabled v-decorator="['userName', {rules: [{ required: true, message: '请输入用户名' }]}]" />
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="用户名">
+        <a-input
+          placeholder="用户名"
+          disabled
+          v-decorator="['userName', { rules: [{ required: true, message: '请输入用户名' }] }]"
+        />
       </a-form-item>
-      <a-form-item
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        label="新密码"
-      >
-        <a-input type="password" placeholder="新密码" v-decorator="['password', {rules: [{ required: true,min:6,max:16, message: '请输入6到16位密码' }]}]" />
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="新密码">
+        <a-input
+          type="password"
+          placeholder="新密码"
+          v-decorator="['password', { rules: [{ required: true, min: 6, max: 16, message: '请输入6到16位密码' }] }]"
+        />
       </a-form-item>
-
     </a-form>
   </a-modal>
 </template>
@@ -35,11 +34,11 @@ import { resetPwd } from '@/api/system'
 import pick from 'lodash.pick'
 export default {
   name: 'UserPwdModal',
-  components: {
-  },
-  data () {
+  components: {},
+  data() {
     return {
-      description: '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
+      description:
+        '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
       visible: false,
       labelCol: {
         xs: { span: 24 },
@@ -54,12 +53,10 @@ export default {
       form: this.$form.createForm(this)
     }
   },
-  beforeCreate () {
-  },
-  created () {
-  },
+  beforeCreate() {},
+  created() {},
   methods: {
-    edit (record) {
+    edit(record) {
       this.form.resetFields()
       this.mdl = Object.assign({}, record)
       this.visible = true
@@ -68,25 +65,35 @@ export default {
         // this.form.setFieldsValue({ ...record })
       })
     },
-    handleSubmit (e) {
+    handleSubmit(e) {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values)
           this.confirmLoading = true
-          resetPwd(values).then(res => {
-            if (res.code === 20000) {
-              this.$message.success(`${values.userName}` + '重置密码成功')
-              // this.$emit('ok')
-              this.visible = false
-            } else {
-              this.$message.success(res.message)
-            }
-          }).catch(() => {
-            this.$message.error('系统错误，请稍后再试')
-          }).finally(() => {
-            this.confirmLoading = false
-          })
+          resetPwd(values)
+            .then(res => {
+              if (res.code === 51000) {
+                this.$message.error('登录已失效，请重新登录')
+                setTimeout(() => {
+                  location.reload()
+                }, 1000)
+                return
+              }
+              if (res.code === 20000) {
+                this.$message.success(`${values.userName}` + '重置密码成功')
+                // this.$emit('ok')
+                this.visible = false
+              } else {
+                this.$message.success(res.message)
+              }
+            })
+            .catch(() => {
+              this.$message.error('系统错误，请稍后再试')
+            })
+            .finally(() => {
+              this.confirmLoading = false
+            })
         }
       })
     }
