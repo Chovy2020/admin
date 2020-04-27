@@ -22,6 +22,7 @@
                 'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change', initialValue: 'admin'}
               ]"
+              style="width: 300px"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
@@ -36,6 +37,7 @@
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur', initialValue: '123456'}
               ]"
+              style="width: 300px"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
@@ -85,6 +87,7 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
+          style="width: 300px"
         >Log in</a-button>
       </a-form-item>
 
@@ -338,10 +341,5 @@ export default {
       float: right;
     }
   }
-}
-</style>
-<style>
-.ant-form-item-control-wrapper {
-  width: 100%!important;
 }
 </style>

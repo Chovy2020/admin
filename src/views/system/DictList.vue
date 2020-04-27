@@ -29,8 +29,13 @@
             </span>
           </a-col>
           <a-col :md="4" :sm="24" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()"
-              >新建</a-button
+            <a-button
+              size="small"
+              v-if="addEnable"
+              type="primary"
+              icon="plus"
+              @click="$refs.modal.add()"
+            >新建</a-button
             >
             <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
@@ -88,7 +93,7 @@ export default {
     DictModal,
     DictDataListModal
   },
-  data() {
+  data () {
     return {
       visible: false,
       labelCol: {
@@ -129,7 +134,14 @@ export default {
           dataIndex: 'status',
           align: 'center',
           scopedSlots: { customRender: 'status' },
-          sorter: true
+          sorter: true,
+          align: 'center'
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'createTm',
+          sorter: true,
+          align: 'center'
         },
         {
           title: '备注',
@@ -137,17 +149,12 @@ export default {
           sorter: true
         },
         {
-          title: '创建时间',
-          align: 'center',
-          dataIndex: 'createTm',
-          sorter: true
-        },
-        {
           title: '操作',
           width: '200px',
           align: 'center',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       // 加载数据方法 必须为 Promise 对象
@@ -180,32 +187,32 @@ export default {
     }
   },
   filters: {
-    statusFilter(type) {
+    statusFilter (type) {
       return statusMap[type].text
     },
-    statusTypeFilter(type) {
+    statusTypeFilter (type) {
       return statusMap[type].status
     }
   },
-  created() {},
+  created () {},
   methods: {
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
-    handleAdd(parentId) {
+    handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
       console.log('handleSaveOk')
     },
-    dataModal(dictType) {
+    dataModal (dictType) {
       this.$refs.datamodal.show(dictType)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',

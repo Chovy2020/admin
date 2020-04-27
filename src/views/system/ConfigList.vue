@@ -29,8 +29,13 @@
             </span>
           </a-col>
           <a-col :md="7" :sm="15" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()"
-              >新建</a-button
+            <a-button
+              size="small"
+              v-if="addEnable"
+              type="primary"
+              icon="plus"
+              @click="$refs.modal.add()"
+            >新建</a-button
             >
             <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(idArr)">删除</a-button>
@@ -47,6 +52,7 @@
       :columns="columns"
       :data="loadData"
       :rangPicker="range"
+      defaultSort="createTm"
     >
       <span slot="configType" slot-scope="text">{{ text | typeFilter }}</span>
       <span slot="configValue" slot-scope="text">
@@ -77,7 +83,7 @@ export default {
     Ellipsis,
     ConfigModal
   },
-  data() {
+  data () {
     return {
       visible: false,
       labelCol: {
@@ -127,23 +133,25 @@ export default {
           sorter: true
         },
         {
+          title: '创建时间',
+          dataIndex: 'createTm',
+          sorter: true,
+          align: 'center'
+        },
+        {
           title: '备注',
           dataIndex: 'remark',
           scopedSlots: { customRender: 'remark' },
-          sorter: true
-        },
-        {
-          title: '创建时间',
-          align: 'center',
-          dataIndex: 'createTm',
-          sorter: true
+          sorter: true,
+          width: '150px'
         },
         {
           title: '操作',
           width: '150px',
           align: 'center',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       range: null,
@@ -177,7 +185,7 @@ export default {
     }
   },
   filters: {
-    typeFilter(type) {
+    typeFilter (type) {
       const typeMap = {
         Y: '是',
         N: '否'
@@ -185,10 +193,10 @@ export default {
       return typeMap[type]
     }
   },
-  beforeCreate() {},
-  created() {},
+  beforeCreate () {},
+  created () {},
   computed: {
-    idArr() {
+    idArr () {
       const idArr = []
       this.selectedRows.forEach(item => {
         idArr.push(item.id)
@@ -197,17 +205,17 @@ export default {
     }
   },
   methods: {
-    onSelectChange(selectedRowKeys, selectedRows) {
+    onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    delByIds(ids) {
+    delByIds (ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',

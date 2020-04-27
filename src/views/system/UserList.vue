@@ -48,8 +48,13 @@
                 </span>
               </a-col>
               <a-col :md="9" d:sm="15" class="table-operator">
-                <a-button v-if="addEnable" size="small" type="primary" icon="plus" @click="$refs.modal.add()"
-                  >新建</a-button
+                <a-button
+                  v-if="addEnable"
+                  size="small"
+                  type="primary"
+                  icon="plus"
+                  @click="$refs.modal.add()"
+                >新建</a-button
                 >
                 <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
                   <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
@@ -111,7 +116,7 @@ export default {
     UserModal,
     UserPwdModal
   },
-  data() {
+  data () {
     return {
       description: '',
       visible: false,
@@ -143,6 +148,7 @@ export default {
         {
           title: '状态',
           dataIndex: 'status',
+          scopedSlots: { customRender: 'status' },
           align: 'center',
           sorter: true
         },
@@ -150,15 +156,15 @@ export default {
           title: '创建时间',
           dataIndex: 'createTm',
           scopedSlots: { customRender: 'createTm' },
-          align: 'center',
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '操作',
           width: '200px',
           dataIndex: 'action',
-          align: 'center',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       // 加载数据方法 必须为 Promise 对象
@@ -199,7 +205,7 @@ export default {
       removeEnable: checkPermission('system:user:remove')
     }
   },
-  created() {
+  created () {
     // getDeptList().then(res => {
     //   const data = res.rows
     //   this.buildtree(data, this.deptTree, 0)
@@ -210,25 +216,25 @@ export default {
     // })
   },
   methods: {
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    resetPwd(record) {
+    resetPwd (record) {
       this.$refs.pwdmodal.edit(record)
     },
-    onChange(selectedRowKeys, selectedRows) {
+    onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh()
       console.log('handleSaveOk')
     },
-    delByIds(ids) {
+    delByIds (ids) {
       console.log('ids', ids)
       this.$confirm({
         title: '提示',
@@ -256,7 +262,7 @@ export default {
         onCancel: () => {}
       })
     },
-    onChangeStatus(record) {
+    onChangeStatus (record) {
       record.status = record.status === '0' ? '1' : '0'
       changUserStatus(pick(record, 'id', 'status')).then(res => {
         if (res.code === 51000) {
@@ -277,7 +283,7 @@ export default {
       })
       // 发送状态到服务器
     },
-    buildtree(list, arr, parentId) {
+    buildtree (list, arr, parentId) {
       list.forEach(item => {
         if (item.parentId === parentId) {
           var child = {
@@ -296,16 +302,16 @@ export default {
       })
     },
     // 下面是树相关方法
-    onExpand(expandedKeys) {
+    onExpand (expandedKeys) {
       this.expandedKeys = expandedKeys
       this.autoExpandParent = false
     },
-    emitEmpty() {
+    emitEmpty () {
       this.$refs.searchInput.focus()
       this.searchValue = ''
       this.searchDept()
     },
-    getParentKey(key, tree) {
+    getParentKey (key, tree) {
       let parentKey
       for (let i = 0; i < tree.length; i++) {
         const node = tree[i]
@@ -319,10 +325,10 @@ export default {
       }
       return parentKey
     },
-    handleChange(e) {
+    handleChange (e) {
       this.searchDept()
     },
-    searchDept() {
+    searchDept () {
       const value = this.searchValue
       const expandedKeys = this.dataList
         .map(item => {
@@ -338,7 +344,7 @@ export default {
         autoExpandParent: true
       })
     },
-    handleSelect(selectedKeys, info) {
+    handleSelect (selectedKeys, info) {
       this.queryParam = {
         deptId: selectedKeys[0]
       }
