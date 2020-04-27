@@ -188,8 +188,8 @@ export default {
           }
           const data = res.data
           data.pageNum = parameter.pageNum
-          data.total = data.totalElements
-          data.data = data.content.map(item => {
+          data.total = data.total
+          data.data = data.data.map(item => {
             return { ...item, filter_EQ_status: `${item.status}` }
           })
           return data
