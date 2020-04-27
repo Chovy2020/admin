@@ -13,7 +13,7 @@ export function getOperLogList (parameter) {
   return axios({
     url: api.operLog + `/page/${pageNum}/${pageSize}`,
     method: 'get',
-    data: queryObj,
+    params: queryObj,
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
@@ -39,7 +39,7 @@ export function getLoginLogList (parameter) {
   return axios({
     url: api.loginLog + `/page/${pageNum}/${pageSize}`,
     method: 'post',
-    data: queryObj,
+    params: queryObj,
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }

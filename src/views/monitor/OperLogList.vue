@@ -5,7 +5,7 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="操作人员">
-              <a-input size="small" placeholder="请输入" v-model="queryParam.operName" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_EQ_operName" />
             </a-form-item>
           </a-col>
           <!-- <a-col :md="4" :sm="12">
@@ -37,11 +37,11 @@
             </span>
           </a-col>
           <a-col :md="4" :sm="15" class="table-operator">
-            <a-popconfirm v-has="'monitor:operlog:remove'" title="确认清空吗？" @confirm="clean">
+            <!-- <a-popconfirm v-has="'monitor:operlog:remove'" title="确认清空吗？" @confirm="clean">
               <a-icon slot="icon" type="question-circle-o" style="color: red" />
               <a-button size="small" type="danger" ghost icon="close">清空</a-button>
-            </a-popconfirm>
-            <a-button size="small" type="primary" icon="export" @click="exportExcel()">导出</a-button>
+            </a-popconfirm> -->
+            <!-- <a-button size="small" type="primary" icon="export" @click="exportExcel()">导出</a-button> -->
             <a-dropdown v-has="'monitor:operlog:remove'" v-if="selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
             </a-dropdown>
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { STable } from '@/components'
 // import { getOperLogList, delOperLog, cleanOperLog, operLogExport } from '@/api/monitor'
 import { getOperLogList, operLogExport } from '@/api/monitor'
@@ -173,7 +174,10 @@ export default {
       range: null,
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log('parameter', parameter)
+        if (this.range && this.range.length === 2) {
+          this.queryParam.filter_GE_operTime = moment(this.range[0]).format('YYYY-MM-DD')
+          this.queryParam.filter_LE_operTime = moment(this.range[1]).format('YYYY-MM-DD')
+        }
         const queryParam = { ...this.queryParam }
         if (this.queryParam.filter_EQ_status === '') {
           delete queryParam.filter_EQ_status

@@ -5,7 +5,7 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="登录地址">
-              <a-input size="small" placeholder="请输入" v-model="queryParam.ipaddr" />
+              <a-input size="small" placeholder="请输入" v-model="queryParam.filter_EQ_ipAddr" />
             </a-form-item>
           </a-col>
           <!-- <a-col :md="5" :sm="15">
@@ -15,11 +15,16 @@
           </a-col> -->
           <a-col :md="4" :sm="12">
             <a-form-item label="登录状态">
-              <a-select size="small" placeholder="请选择" v-model="queryParam.status" default-value="0">
+              <!-- <a-select size="small" placeholder="请选择" v-model="queryParam.status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
                 <a-select-option v-for="(d, index) in commonStatus" :key="index" :value="d.dictValue">{{
                   d.dictLabel
                 }}</a-select-option>
+              </a-select> -->
+              <a-select size="small" placeholder="请选择" v-model="queryParam.filter_EQ_status" default-value="0">
+                <a-select-option :value="''">全部</a-select-option>
+                <a-select-option :value="0">成功</a-select-option>
+                <a-select-option :value="1">失败</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -35,10 +40,10 @@
             </span>
           </a-col>
           <a-col :md="5" :sm="12" class="table-operator">
-            <a-popconfirm v-has="'monitor:logininfor:remove'" title="确认清空吗？" @confirm="clean">
+            <!-- <a-popconfirm v-has="'monitor:logininfor:remove'" title="确认清空吗？" @confirm="clean">
               <a-icon slot="icon" type="question-circle-o" style="color: red" />
               <a-button size="small" type="danger" ghost icon="close">清空</a-button>
-            </a-popconfirm>
+            </a-popconfirm> -->
             <a-dropdown v-has="'monitor:logininfor:remove'" v-if="selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
             </a-dropdown>
@@ -64,6 +69,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { STable } from '@/components'
 // import { getLoginLogList, delLoginLog, cleanLoginLog } from '@/api/monitor'
 import { getLoginLogList } from '@/api/monitor'
@@ -153,6 +159,10 @@ export default {
       range: null,
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
+        if (this.range && this.range.length === 2) {
+          this.queryParam.filter_GE_loginTime = moment(this.range[0]).format('YYYY-MM-DD')
+          this.queryParam.filter_LE_loginTime = moment(this.range[1]).format('YYYY-MM-DD')
+        }
         return getLoginLogList(Object.assign(parameter, this.queryParam)).then(res => {
           if (res.code === 51000) {
             this.$message.error('登录已失效，请重新登录')
@@ -188,11 +198,11 @@ export default {
   },
   beforeCreate () {},
   async created () {
-    const commonStatus = await getDictArray('sys_common_status')
-    this.commonStatus = commonStatus.data
-    this.commonStatus.map(d => {
-      commonStatusMap[d.dictValue] = { text: d.dictLabel }
-    })
+    // const commonStatus = await getDictArray('sys_common_status')
+    // this.commonStatus = commonStatus.data
+    // this.commonStatus.map(d => {
+    //   commonStatusMap[d.dictValue] = { text: d.dictLabel }
+    // })
   },
   methods: {
     onSelectChange (selectedRowKeys, selectedRows) {
