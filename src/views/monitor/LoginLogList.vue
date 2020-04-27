@@ -5,7 +5,7 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="登陆地址">
-              <a-input size="small" placeholder="请输入" v-model="queryParam.ipaddr"/>
+              <a-input size="small" placeholder="请输入" v-model="queryParam.ipaddr" />
             </a-form-item>
           </a-col>
           <!-- <a-col :md="5" :sm="15">
@@ -17,19 +17,21 @@
             <a-form-item label="登陆状态">
               <a-select size="small" placeholder="请选择" v-model="queryParam.status" default-value="0">
                 <a-select-option :value="''">全部</a-select-option>
-                <a-select-option v-for="(d, index) in commonStatus" :key="index" :value="d.dictValue">{{ d.dictLabel }}</a-select-option>
+                <a-select-option v-for="(d, index) in commonStatus" :key="index" :value="d.dictValue">{{
+                  d.dictLabel
+                }}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="18">
             <a-form-item label="登陆时间">
-              <a-range-picker size="small" v-model="range"/>
+              <a-range-picker size="small" v-model="range" />
             </a-form-item>
           </a-col>
           <a-col :md="4" :sm="12">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => (queryParam = {})">重置</a-button>
             </span>
           </a-col>
           <a-col :md="5" :sm="12" class="table-operator">
@@ -48,7 +50,7 @@
       size="default"
       ref="table"
       rowKey="infoId"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
       :rangPicker="range"
@@ -72,7 +74,7 @@ export default {
   components: {
     STable
   },
-  data () {
+  data() {
     return {
       visible: false,
       labelCol: {
@@ -143,6 +145,13 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         return getLoginLogList(Object.assign(parameter, this.queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.data = data.data.map(item => {
@@ -154,14 +163,13 @@ export default {
       commonStatus: [],
       selectedRowKeys: [],
       selectedRows: []
-
     }
   },
   filters: {
-    operTypeFilter (type) {
+    operTypeFilter(type) {
       return commonStatusMap[type].text
     },
-    statusFilter (status) {
+    statusFilter(status) {
       const statusMap = {
         '1': '失败',
         '0': '成功'
@@ -169,10 +177,8 @@ export default {
       return statusMap[status]
     }
   },
-  beforeCreate () {
-
-  },
-  async created () {
+  beforeCreate() {},
+  async created() {
     const commonStatus = await getDictArray('sys_common_status')
     this.commonStatus = commonStatus.data
     this.commonStatus.map(d => {
@@ -180,14 +186,14 @@ export default {
     })
   },
   methods: {
-    onSelectChange (selectedRowKeys, selectedRows) {
+    onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk () {
+    handleOk() {
       this.$refs.table.refresh(true)
     },
-    delByIds (ids) {
+    delByIds(ids) {
       this.$message.success(`你删除了` + ids)
       // delLoginLog({ ids: ids.join(',') }).then(res => {
       //   if (res.code === 0) {
@@ -199,7 +205,7 @@ export default {
       //   this.selectedRowKeys = []
       // })
     },
-    clean () {
+    clean() {
       this.$message.success(`你点击了清空`)
       // cleanLoginLog().then(res => {
       //   this.handleOk()

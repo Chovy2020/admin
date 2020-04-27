@@ -1,14 +1,8 @@
 <template>
-  <a-modal
-    title="字典数据"
-    style="top: 20px;"
-    :width="1100"
-    v-model="visible"
-    :footer="null"
-  >
+  <a-modal title="字典数据" style="top: 20px;" :width="1100" v-model="visible" :footer="null">
     <div class="table-operator">
       <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add(dictType)">新建</a-button>
-      <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
+      <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
         <a-button type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
       </a-dropdown>
     </div>
@@ -16,7 +10,7 @@
       size="default"
       ref="table"
       rowKey="id"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
     >
@@ -56,7 +50,7 @@ export default {
     STable,
     DictDataModal
   },
-  data () {
+  data() {
     return {
       visible: false,
       labelCol: {
@@ -73,7 +67,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { },
+      queryParam: {},
       // 表头
       columns: [
         {
@@ -119,15 +113,21 @@ export default {
         if (this.queryParam.filter_EQ_configType === '') {
           delete queryParam.filter_EQ_configType
         }
-        return getDictDataList(Object.assign(parameter, queryParam))
-          .then(res => {
-            const data = res.data
-            data.pageNum = parameter.pageNum
-            data.data = data.data.map(item => {
-              return { ...item, status: `${item.status}` }
-            })
-            return data
+        return getDictDataList(Object.assign(parameter, queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
+          const data = res.data
+          data.pageNum = parameter.pageNum
+          data.data = data.data.map(item => {
+            return { ...item, status: `${item.status}` }
           })
+          return data
+        })
       },
       dictType: '',
       selectedRowKeys: [],
@@ -138,34 +138,40 @@ export default {
     }
   },
   filters: {
-    statusFilter (type) {
+    statusFilter(type) {
       return statusMap[type].text
     },
-    statusTypeFilter (type) {
+    statusTypeFilter(type) {
       return statusMap[type].status
     }
   },
-  created () {
-  },
+  created() {},
   methods: {
-    show (dictType) {
+    show(dictType) {
       this.visible = true
       this.queryParam.dictType = dictType
       this.dictType = dictType
       this.$refs.table && this.$refs.table.refresh(true)
     },
-    onSelectChange (selectedRowKeys) {
+    onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
-    handleEdit (record) {
+    handleEdit(record) {
       this.$refs.modal.edit(record)
     },
-    handleOk () {
+    handleOk() {
       this.$refs.table.refresh(true)
       console.log('handleSaveOk')
     },
-    delByIds (ids) {
+    delByIds(ids) {
       delDictData({ ids: ids.join(',') }).then(res => {
+        if (res.code === 51000) {
+          this.$message.error('登录已失效，请重新登录')
+          setTimeout(() => {
+            location.reload()
+          }, 1000)
+          return
+        }
         if (res.code === 20000) {
           this.$message.success(res.message)
           this.handleOk()

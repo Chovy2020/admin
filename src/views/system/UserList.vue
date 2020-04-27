@@ -44,12 +44,14 @@
               <a-col :md="5" d:sm="15">
                 <span class="table-page-search-submitButtons">
                   <a-button type="primary" size="small" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button style="margin-left: 8px" size="small" @click="() => queryParam = {}">重置</a-button>
+                  <a-button style="margin-left: 8px" size="small" @click="() => (queryParam = {})">重置</a-button>
                 </span>
               </a-col>
               <a-col :md="9" d:sm="15" class="table-operator">
-                <a-button v-if="addEnable" size="small" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-                <a-dropdown v-if="removeEnable&& selectedRowKeys.length > 0">
+                <a-button v-if="addEnable" size="small" type="primary" icon="plus" @click="$refs.modal.add()"
+                  >新建</a-button
+                >
+                <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
                   <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
                 </a-dropdown>
               </a-col>
@@ -60,14 +62,14 @@
           size="default"
           ref="table"
           rowKey="id"
-          :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+          :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
           :columns="columns"
           :data="loadData"
         >
-          <span slot="status" slot-scope="text,record">
-            <a-switch :checked="record.status=='0'" @change="onChangeStatus(record)" />
+          <span slot="status" slot-scope="text, record">
+            <a-switch :checked="record.status == '0'" @change="onChangeStatus(record)" />
           </span>
-          <span slot="createTm" slot-scope="text,record">{{ record.createTm | dayjs }}</span>
+          <span slot="createTm" slot-scope="text, record">{{ record.createTm | dayjs }}</span>
           <span slot="action" slot-scope="text, record">
             <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
@@ -109,7 +111,7 @@ export default {
     UserModal,
     UserPwdModal
   },
-  data () {
+  data() {
     return {
       description: '',
       visible: false,
@@ -169,6 +171,13 @@ export default {
           delete queryParam.filter_LK_userName
         }
         return getUserList(Object.assign(parameter, queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.data = data.data.map(item => {
@@ -190,7 +199,7 @@ export default {
       removeEnable: checkPermission('system:user:remove')
     }
   },
-  created () {
+  created() {
     // getDeptList().then(res => {
     //   const data = res.rows
     //   this.buildtree(data, this.deptTree, 0)
@@ -201,31 +210,38 @@ export default {
     // })
   },
   methods: {
-    onSelectChange (selectedRowKeys) {
+    onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleEdit (record) {
+    handleEdit(record) {
       this.$refs.modal.edit(record)
     },
-    resetPwd (record) {
+    resetPwd(record) {
       this.$refs.pwdmodal.edit(record)
     },
-    onChange (selectedRowKeys, selectedRows) {
+    onChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk () {
+    handleOk() {
       this.$refs.table.refresh()
       console.log('handleSaveOk')
     },
-    delByIds (ids) {
+    delByIds(ids) {
       console.log('ids', ids)
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
         onOk: () => {
           delUser({ ids: ids.join(',') }).then(res => {
+            if (res.code === 51000) {
+              this.$message.error('登录已失效，请重新登录')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+              return
+            }
             if (res.code === 20000) {
               this.$message.success(`删除成功`)
               this.handleOk()
@@ -240,9 +256,16 @@ export default {
         onCancel: () => {}
       })
     },
-    onChangeStatus (record) {
+    onChangeStatus(record) {
       record.status = record.status === '0' ? '1' : '0'
       changUserStatus(pick(record, 'id', 'status')).then(res => {
+        if (res.code === 51000) {
+          this.$message.error('登录已失效，请重新登录')
+          setTimeout(() => {
+            location.reload()
+          }, 1000)
+          return
+        }
         if (res.code === 20000) {
           this.$message.success(res.message)
         } else {
@@ -254,7 +277,7 @@ export default {
       })
       // 发送状态到服务器
     },
-    buildtree (list, arr, parentId) {
+    buildtree(list, arr, parentId) {
       list.forEach(item => {
         if (item.parentId === parentId) {
           var child = {
@@ -273,16 +296,16 @@ export default {
       })
     },
     // 下面是树相关方法
-    onExpand (expandedKeys) {
+    onExpand(expandedKeys) {
       this.expandedKeys = expandedKeys
       this.autoExpandParent = false
     },
-    emitEmpty () {
+    emitEmpty() {
       this.$refs.searchInput.focus()
       this.searchValue = ''
       this.searchDept()
     },
-    getParentKey (key, tree) {
+    getParentKey(key, tree) {
       let parentKey
       for (let i = 0; i < tree.length; i++) {
         const node = tree[i]
@@ -296,10 +319,10 @@ export default {
       }
       return parentKey
     },
-    handleChange (e) {
+    handleChange(e) {
       this.searchDept()
     },
-    searchDept () {
+    searchDept() {
       const value = this.searchValue
       const expandedKeys = this.dataList
         .map(item => {
@@ -315,7 +338,7 @@ export default {
         autoExpandParent: true
       })
     },
-    handleSelect (selectedKeys, info) {
+    handleSelect(selectedKeys, info) {
       this.queryParam = {
         deptId: selectedKeys[0]
       }

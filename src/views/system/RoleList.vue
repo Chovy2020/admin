@@ -20,12 +20,14 @@
           <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => (queryParam = {})">重置</a-button>
             </span>
           </a-col>
           <a-col :md="6" :sm="15" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
-            <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
+            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()"
+              >新建</a-button
+            >
+            <a-dropdown v-if="removeEnable && selectedRowKeys.length > 0">
               <a-button size="small" type="danger" icon="delete" @click="delByIds(selectedRowKeys)">删除</a-button>
             </a-dropdown>
           </a-col>
@@ -51,7 +53,7 @@
       size="default"
       ref="table"
       rowKey="id"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data="loadData"
     >
@@ -73,10 +75,10 @@
           </a-col>
         </a-row>
       </div>-->
-      <span slot="status" slot-scope="text,record">
-        <a-switch :checked="record.status==0" @change="onChangeStatus(record)" />
+      <span slot="status" slot-scope="text, record">
+        <a-switch :checked="record.status == 0" @change="onChangeStatus(record)" />
       </span>
-      <span slot="createTm" slot-scope="text,record">{{ record.createTm | dayjs }}</span>
+      <span slot="createTm" slot-scope="text, record">{{ record.createTm | dayjs }}</span>
       <span slot="action" slot-scope="text, record">
         <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />
@@ -104,7 +106,7 @@ export default {
     RoleModal,
     RoleScopeModal
   },
-  data () {
+  data() {
     return {
       description: '',
       visible: false,
@@ -169,6 +171,13 @@ export default {
           delete queryParam.filter_LK_roleName
         }
         return getRoleList(Object.assign(parameter, queryParam)).then(res => {
+          if (res.code === 51000) {
+            this.$message.error('登录已失效，请重新登录')
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            return
+          }
           const data = res.data
           data.pageNum = parameter.pageNum
           data.data = data.data.map(item => {
@@ -184,34 +193,41 @@ export default {
       removeEnable: checkPermission('system:role:remove')
     }
   },
-  created () {},
+  created() {},
   methods: {
-    onSelectChange (selectedRowKeys) {
+    onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleAdd (parentId) {
+    handleAdd(parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit (record) {
+    handleEdit(record) {
       this.$refs.modal.edit(record)
     },
-    handleScope (record) {
+    handleScope(record) {
       this.$refs.scopemodal.edit(record)
     },
-    onChange (selectedRowKeys, selectedRows) {
+    onChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    handleOk () {
+    handleOk() {
       this.$refs.table.refresh(true)
     },
-    delByIds (ids) {
+    delByIds(ids) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
         onOk: () => {
           delRole({ ids: ids.join(',') }).then(res => {
+            if (res.code === 51000) {
+              this.$message.error('登录已失效，请重新登录')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+              return
+            }
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.handleOk()
@@ -226,9 +242,16 @@ export default {
         onCancel: () => {}
       })
     },
-    onChangeStatus (record) {
+    onChangeStatus(record) {
       record.status = record.status === '0' ? '1' : '0'
       changRoleStatus(pick(record, 'id', 'status')).then(res => {
+        if (res.code === 51000) {
+          this.$message.error('登录已失效，请重新登录')
+          setTimeout(() => {
+            location.reload()
+          }, 1000)
+          return
+        }
         if (res.code === 20000) {
           this.$message.success(res.message)
         } else {

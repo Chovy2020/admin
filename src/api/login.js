@@ -68,3 +68,4 @@ export function get2step (parameter) {
     data: parameter
   })
 }
+

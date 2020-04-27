@@ -25,11 +25,13 @@
           <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button size="small" type="primary" @click="fetch">查询</a-button>
-              <a-button size="small" style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
+              <a-button size="small" style="margin-left: 8px" @click="() => (queryParam = {})">重置</a-button>
             </span>
           </a-col>
           <a-col :md="4" :sm="15" class="table-operator">
-            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+            <a-button size="small" v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()"
+              >新建</a-button
+            >
           </a-col>
         </a-row>
       </a-form>
@@ -50,7 +52,7 @@
       <span slot="action" slot-scope="text, record">
         <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
         <a-divider type="vertical" />
-        <a v-if="addEnable" @click="handleAdd(record.id+'')">新增</a>
+        <a v-if="addEnable" @click="handleAdd(record.id + '')">新增</a>
         <a-divider type="vertical" />
         <a v-if="removeEnable" @click="delById(record.id)">删除</a>
       </span>
@@ -72,7 +74,7 @@ export default {
     T,
     PermissionModal
   },
-  data () {
+  data() {
     return {
       description: '',
 
@@ -157,14 +159,14 @@ export default {
     }
   },
   filters: {
-    statusFilter (status) {
+    statusFilter(status) {
       const statusMap = {
         '1': '隐藏',
         '0': '显示'
       }
       return statusMap[status]
     },
-    resTypeFilter (type) {
+    resTypeFilter(type) {
       const menuMap = {
         M: '目录',
         F: '按钮',
@@ -173,26 +175,33 @@ export default {
       return menuMap[type]
     }
   },
-  created () {
+  created() {
     this.fetch()
   },
   methods: {
-    handleAdd (parentId) {
+    handleAdd(parentId) {
       this.$refs.modal.add(parentId)
     },
-    handleEdit (record) {
+    handleEdit(record) {
       this.$refs.modal.edit(record)
     },
-    handleOk () {
+    handleOk() {
       // this.$refs.table.refresh()
       this.fetch()
     },
-    delById (id) {
+    delById(id) {
       this.$confirm({
         title: '提示',
         content: '真的要删除吗 ?',
         onOk: () => {
           delPerm(id).then(res => {
+            if (res.code === 51000) {
+              this.$message.error('登录已失效，请重新登录')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+              return
+            }
             if (res.code === 20000) {
               this.$message.success(res.message)
               this.handleOk()
@@ -204,10 +213,10 @@ export default {
         onCancel: () => {}
       })
     },
-    handleChange (res) {
+    handleChange(res) {
       console.log('res', res)
     },
-    fetch () {
+    fetch() {
       this.loading = true
       console.log('fetch', this.queryParam)
       if (!this.queryParam.filter_LK_resKey) {
@@ -220,6 +229,13 @@ export default {
         delete this.queryParam.filter_EQ_visible
       }
       getPermissions(Object.assign(this.queryParam)).then(res => {
+        if (res.code === 51000) {
+          this.$message.error('登录已失效，请重新登录')
+          setTimeout(() => {
+            location.reload()
+          }, 1000)
+          return
+        }
         if (res.code === 20000) {
           console.log('permission', res)
           this.data = treeData(res.data, 'id')
