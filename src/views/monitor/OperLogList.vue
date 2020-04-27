@@ -121,7 +121,8 @@ export default {
         {
           title: '系统模块',
           dataIndex: 'title',
-          sorter: true
+          sorter: true,
+          align: 'center'
         },
         {
           title: '操作人员',
@@ -162,7 +163,6 @@ export default {
       range: null,
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log('parameter', parameter)
         const queryParam = { ...this.queryParam }
         if (this.queryParam.filter_EQ_status === '') {
           delete queryParam.filter_EQ_status
@@ -177,9 +177,8 @@ export default {
           }
           const data = res.data
           data.pageNum = parameter.pageNum
-          data.total = data.totalElements
-          data.data = data.content.map(item => {
-            return { ...item, filter_EQ_status: `${item.status}` }
+          data.data = data.data.map(item => {
+            return { ...item, status: `${item.status}` }
           })
           return data
         })

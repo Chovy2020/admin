@@ -11,7 +11,7 @@
       <a-form-item style="display:none!important">
         <a-input v-decorator="['id']"/>
       </a-form-item>
-      <a-form-item style="display:none">
+      <a-form-item style="display:none!important">
         <a-input v-decorator="['dictType']"/>
       </a-form-item>
       <a-form-item

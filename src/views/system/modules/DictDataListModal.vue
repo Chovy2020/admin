@@ -34,6 +34,12 @@ import DictDataModal from './DictDataModal.vue'
 import { checkPermission } from '@/utils/permissions'
 
 const statusMap = {
+  // 暂时解决status栏错位问题，最终还需后台填补status数据，
+  null: {
+    status: '',
+    text: ''
+  },
+  //
   0: {
     status: 'success',
     text: '正常'
@@ -50,7 +56,7 @@ export default {
     STable,
     DictDataModal
   },
-  data() {
+  data () {
     return {
       visible: false,
       labelCol: {
@@ -72,39 +78,49 @@ export default {
       columns: [
         {
           title: '字典编码',
-          dataIndex: 'id'
+          dataIndex: 'id',
+          sorter: true
         },
         {
           title: '字典标签',
-          dataIndex: 'dictLabel'
+          dataIndex: 'dictLabel',
+          sorter: true
         },
         {
           title: '字典键值',
-          dataIndex: 'dictValue'
+          dataIndex: 'dictValue',
+          sorter: true
         },
         {
           title: '字典排序',
-          dataIndex: 'dictSort'
+          dataIndex: 'dictSort',
+          sorter: true,
+          align: 'center'
         },
         {
           title: '状态',
           dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark'
+          scopedSlots: { customRender: 'status' },
+          sorter: true,
+          align: 'center'
         },
         {
           title: '创建时间',
-          dataIndex: 'createTime',
+          dataIndex: 'createTm',
+          sorter: true,
+          align: 'center'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
           sorter: true
         },
         {
           title: '操作',
           width: '150px',
           dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          scopedSlots: { customRender: 'action' },
+          align: 'center'
         }
       ],
       // 加载数据方法 必须为 Promise 对象
@@ -138,32 +154,32 @@ export default {
     }
   },
   filters: {
-    statusFilter(type) {
+    statusFilter (type) {
       return statusMap[type].text
     },
-    statusTypeFilter(type) {
+    statusTypeFilter (type) {
       return statusMap[type].status
     }
   },
-  created() {},
+  created () {},
   methods: {
-    show(dictType) {
+    show (dictType) {
       this.visible = true
       this.queryParam.dictType = dictType
       this.dictType = dictType
       this.$refs.table && this.$refs.table.refresh(true)
     },
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
-    handleEdit(record) {
+    handleEdit (record) {
       this.$refs.modal.edit(record)
     },
-    handleOk() {
+    handleOk () {
       this.$refs.table.refresh(true)
       console.log('handleSaveOk')
     },
-    delByIds(ids) {
+    delByIds (ids) {
       delDictData({ ids: ids.join(',') }).then(res => {
         if (res.code === 51000) {
           this.$message.error('登录已失效，请重新登录')

@@ -66,10 +66,11 @@ export function getRoleList (parameter) {
     params: queryObj
   })
 }
-export function getRoleAll () {
+export function getRoleAll (parameter = {}) {
   return axios({
     url: api.role + '/list',
-    method: 'get'
+    method: 'get',
+    params: parameter
   })
 }
 

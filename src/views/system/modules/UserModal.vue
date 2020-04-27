@@ -106,7 +106,7 @@ export default {
     }
   },
   components: {},
-  data() {
+  data () {
     return {
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
@@ -126,16 +126,16 @@ export default {
       form: this.$form.createForm(this)
     }
   },
-  beforeCreate() {},
-  created() {
-    this.loadRoleAll()
+  beforeCreate () {},
+  created () {
+    this.loadRoleAll({ 'filter_EQ_status': 0 })
   },
   methods: {
-    add() {
+    add () {
       this.form.resetFields()
       this.edit({ id: 0, deptId: '' })
     },
-    edit(record) {
+    edit (record) {
       this.mdl = Object.assign({}, record)
       this.mdl.roles &&
         (this.mdl.roles = this.mdl.roles.map(item => {
@@ -146,10 +146,9 @@ export default {
         this.form.setFieldsValue(
           pick(this.mdl, 'id', 'nickName', 'userName', 'phone', 'email', 'status', 'roles', 'remark', 'deptId')
         )
-        // this.form.setFieldsValue({ ...record })
       })
     },
-    onChange(value, label, extra) {
+    onChange (value, label, extra) {
       if (extra.triggerNode.$children.length > 0) {
         this.$message.error('不能选择父节点' + `${label}`)
         this.deptCheck = false
@@ -157,8 +156,8 @@ export default {
         this.deptCheck = true
       }
     },
-    loadRoleAll() {
-      getRoleAll().then(res => {
+    loadRoleAll (param) {
+      getRoleAll(param).then(res => {
         if (res.code === 51000) {
           this.$message.error('登录已失效，请重新登录')
           setTimeout(() => {
@@ -170,7 +169,7 @@ export default {
         console.log('roleALl', this.roleAll)
       })
     },
-    handleSubmit(e) {
+    handleSubmit (e) {
       console.log(e)
       e.preventDefault()
       if (!this.deptCheck) {
